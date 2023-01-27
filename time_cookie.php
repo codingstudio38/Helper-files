@@ -40,6 +40,13 @@ foreach ($products as $key => $value) {
 	</tr>
 </table>
 <div id='Mouse' style="position: absolute; margin-left: 20px;width: 80px; height: 20px; background: antiquewhite; text-align: center; border: 1px solid;">Mouse</div>
+
+
+
+
+
+
+<input type="file" name="test" id="testname" onchange="readURL()">
 <script type="text/javascript">
 
 addEventListener('mousemove', (event) => {
@@ -123,6 +130,26 @@ addEventListener('mousemove', (event) => {
  function removecookies() {
     document.cookie = 'products=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 } 
+
+
+
+  
+ function readURL() {
+  var test = document.getElementById(`testname`);
+   let base64data;
+        if (test.files && test.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+              console.log(e.target.result);
+            };
+             //console.log(test.files[0].name);
+             //console.log(test.files[0]);
+            reader.readAsDataURL(test.files[0]);
+             
+
+        }
+    }
+
 </script>
 </body>
 </html>
