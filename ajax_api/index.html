@@ -1,0 +1,470 @@
+<!DOCTYPE html>  
+<html ng-app='myapp'>
+  <head>
+    <title>
+      Ajax | Sending JSON data to server.
+    </title> 
+    <script src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/xlsx.full.min.js"></script>
+    <script type="text/javascript" src="js/jszip.js"></script>
+     <!--<script src="https://code.jquery.com/jquery-3.5.0.js"></script>-->
+    <link rel="stylesheet" href="css/w3.css">
+    <link rel="stylesheet" href="css/style.css">
+   <style type="text/css">
+span{color:green;}
+.myFormId{background-color: #bcddfb;border-style: dashed;} 
+.File_edit{ width: 185px; background: linear-gradient(40deg,#ff6ec4,#7873f5);} 
+.button{width: 92.5px; background: linear-gradient(40deg,#ff6ec4,#7873f5);height: 26px;border: none;} 
+    </style>
+    <script type="text/javascript">
+//         $(document).ready(function(){
+//             var a = 10;
+// console.log(a++);
+//         })
+    </script>
+   </head>
+  
+  <body style="text-align:center;" id="body" ng-controller="userCtrl" >
+    <h1 style="color:green;">
+     Ajax Api
+    </h1> 
+ 
+        <p id="result"></p>
+        <form method="post" enctype="multipart/form-data" action="">
+          <table width="50%" border="0" align="center">
+         <tr>
+         <td width="34%">Passphoto</td>
+           <td width="30%">
+    <input type="file" name="inputFile" id="inputFile" class="inputFile" accept="image/jpeg, image/jpg, image/png">
+    
+    <input type="button" id="uploadBtn"  value="UPLOAD" class="btnSubmit" />
+           </td>
+           <td width="36%"><div id="targetLayer" >No Image</div></td>
+         </tr>
+        </table>
+      </form>
+      <form method="post" enctype="multipart/form-data" action="" id="data_form" >
+          <table width="50%" border="0" align="center">
+        <tr>
+         <td width="33%">Name</td>
+          <td width="31%"><input type="text" id="name1" placeholder="Video Name"></td>
+          <td width="36%"></td>
+         </tr>
+        <tr>
+         <td width="33%">Email Id</td>
+          <td width="31%"><input type="text" id="email" placeholder="Email Id" ></td>
+          <td width="36%"><div id="mailpoint"></div></td>
+         </tr>
+         <tr>
+         <td colspan="3"><input type="button" id="Sent" value="Send JSON" ><input type="button" id="XL_FILE" value="ADD XL FILE" onClick="document.getElementById('xl').style.display='block'" ></td>
+         </tr>
+        </table>
+        </form>
+ 
+
+
+<div id="xl" class="w3-modal" style="display:none;">
+  <div class="w3-modal-content" style="width:700px;
+    height:100%;
+    border: 5px solid #e36900;
+    margin-top: -60px;">
+    <div class="w3-container">
+   <span onClick="document.getElementById('xl').style.display='none';document.getElementById('dvExcel').innerHTML='';document.getElementById('fileUpload').value='';document.getElementById('xlsubmit').style.display='none';" class="w3-closebtn"
+   style="color: #FFFFFF;
+    text-align: center;
+    font-size: 15px;
+    border: 1px solid transparent;
+    padding: 3px 10px;
+    text-decoration: none;
+    border-radius: .25rem;
+    background-color: #e92929;
+    margin-top:10px;">Cancel</span>
+      <div style="background-color: #E19F04;
+    color: #FFFFFF;
+    font-size: 17px;
+    font-weight: bold;
+    margin-top: 45px;
+    width: 100%;
+    text-align: center;">Select XL File</div>
+    <style>
+  .input_type{
+  width:100%;
+  border:2px solid #FF00FF;
+  border-radius: .25rem;}
+  </style>
+<form method="post" enctype="multipart/form-data" action="#" id="xlform" >
+  <table width="50%" border="0" align="center">
+    <tr>
+      <td><input type="file" id="fileUpload" name="fileUpload" /></td>
+      <td> <input type="button" name="xlsubmit" id="xlsubmit" value="Confirm Upload"  style=" display:none;background-color: #00d517;
+font-size: medium;" /></td>
+    </tr>
+  </table>
+
+
+    </form>
+    <div id="dvExcel">
+    </div>
+</div>
+</div>
+</div>
+
+
+</div>
+ <div id="uploaddata"> </div>
+
+ <br>
+<script type="text/javascript">
+$(document).ready(function() {
+  loaddata();
+});
+function loaddata() {
+    $.ajax({
+    type: "POST",
+    url: "api/data_view.php",
+    success: function(data){
+    $("#uploaddata").html(data);     
+    }
+  });
+}
+
+ function Edit(id){
+document.getElementById("id02"+id).style.display = "block";
+} 
+function viewform(id){
+  document.getElementById("myFormId"+id).style.display = "block";
+}  
+ function hideform(id){
+document.getElementById("myFormId"+id).style.display = "none";
+} 
+$(document).ready(function(){
+    $("#uploadBtn").click(function(){
+       var formData = new FormData(this.form);
+       var inputFile=$("#inputFile").val();
+       if(inputFile == ""){
+       alert("Please Select A Passphoto"); exit;
+       }
+        $.ajax({
+            url: 'api/img_api.php',
+            type: 'POST',
+            data: formData,
+            contentType: false,       
+            cache: false,             
+            processData:false, 
+            success:function(response) {
+            $("#targetLayer").html(response);                    
+            }
+        });      
+    });
+});
+document.getElementById("inputFile").onchange = function(){
+     var image =document.getElementById("inputFile").value;
+     if(image!='')
+     {
+           var checkimg = image.toLowerCase();
+          if (!checkimg.match(/(\.jpg|\.png|\.JPG|\.PNG|\.jpeg|\.JPEG|\.pdf|\.doc|\.docx|\.txt|\.xlsx)$/)){ 
+              document.getElementById("inputFile").focus();
+              alert("Please Select jpg,png4325,pdf,xl,.doc");
+              document.getElementById("inputFile").value=""; exit;
+           }
+            var image = document.getElementById("inputFile"); 
+            var size = parseFloat(image.files[0].size / (1024 * 1024)).toFixed(2); 
+           if(size >  2)  
+            {
+            alert("Please select image size less than 2 MB");
+            document.getElementById("inputFile").value=""; exit;
+            }
+             return true;
+      }
+} 
+function updateimg(id){
+     var image =document.getElementById("File_edit"+id).value;
+     if(image!='')
+     {
+           var checkimg = image.toLowerCase();
+          if (!checkimg.match(/(\.jpg|\.png|\.JPG|\.PNG|\.jpeg|\.JPEG|\.pdf|\.doc|\.docx|\.txt|\.xlsx)$/)){ 
+              document.getElementById("File_edit"+id).focus();
+              alert("Please Select jpg,png,pdf,xl,.doc");
+              document.getElementById("File_edit"+id).value=""; exit;
+           }
+            var image = document.getElementById("File_edit"+id); 
+            var size = parseFloat(image.files[0].size / (1024 * 1024)).toFixed(2); 
+           if(size >  2)  
+            {
+            alert("Please select image size less than 2 MB");
+            document.getElementById("File_edit"+id).value=""; exit;
+            } else {
+      upload(id);
+      }
+             return true;
+      }
+}
+function upload(id){
+     var get_formData = document.querySelector('#myFormId'+id);
+     var formData = new FormData(get_formData);
+     var inputFile=$("#File_edit"+id).val();
+     if(inputFile == ""){
+       alert("Please Select A Passphoto"); exit;
+       }
+        $.ajax({
+            url: 'api/img_update.php',
+            type: 'POST',
+            data: formData,
+            contentType: false,       
+            cache: false,             
+            processData:false, 
+            success:function(response) {
+            $("#update_sms"+id).html(response);                    
+            }
+        });      
+}; 
+document.getElementById('email').onchange = function(){
+            var email = document.getElementById("email").value;
+            let xhr = new XMLHttpRequest();
+            let url = "api/api.php";
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+              if (xhr.readyState === 4 && xhr.status === 200) {
+                  var responseJsonObj = JSON.parse(this.responseText);
+                  if (responseJsonObj.statusapi=="success"){
+			  document.getElementById("email").style.borderColor = "green";
+              document.getElementById("mailpoint").innerHTML= ("<span style='color:green;'>"+responseJsonObj.message+"</span>");exit;
+                       } else if (responseJsonObj.statusapi=="Failed"){
+			  document.getElementById("email").style.borderColor = "red";
+              document.getElementById("mailpoint").innerHTML= ("<span style='color:red;'>"+responseJsonObj.message+"</span>");exit;
+                       }
+                 }
+            };
+            var jsonData = JSON.stringify({"email":email, "method":"MailValid" });
+            xhr.send(jsonData);
+        }
+document.getElementById('Sent').onclick = function(){
+      var inputFile = document.getElementById("inputFile").value;
+      if(inputFile==""){
+      alert("Please Select A Passphoto");exit;
+      }
+      var photo =document.getElementById("photo").value;
+      var name1 =document.getElementById("name1").value;
+      if(name1==""){
+      document.getElementById("name1").style.borderColor = "red"; exit;
+      } else {
+      document.getElementById("name1").style.borderColor = ""; 
+      }
+      var email =document.getElementById("email").value;
+      if(email==""){
+      document.getElementById("email").style.borderColor = "red"; exit;
+      } else {
+      document.getElementById("email").style.borderColor = ""; 
+      }
+            let xhr = new XMLHttpRequest();
+            let url = "api/api.php";
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+              if (xhr.readyState === 4 && xhr.status === 200) {
+                  var responseJsonObj = JSON.parse(this.responseText);
+                  document.getElementById("data_form").reset();
+                  document.getElementById("inputFile").value="";
+                  document.getElementById("targetLayer").innerHTML="";
+                  loaddata();
+                  if (responseJsonObj.statusapi=="success"){
+              document.getElementById("result").innerHTML= ("<span style='color:green;'>"+responseJsonObj.message+"</span>");
+                       } else {
+              document.getElementById("result").innerHTML= ("<span style='color:red;'>"+"Upload Failed..!!"+"</span>");
+                       }
+                 }
+            };
+            var jsonData = JSON.stringify({ "photo": photo, "name": name1, "email": email, "method":"insert" });
+            xhr.send(jsonData);
+        }
+
+function updatedata(id){
+      var update_name =document.getElementById("update_name"+id).value;
+      if(update_name==""){
+      document.getElementById("update_name"+id).style.borderColor = "red"; exit;
+      } else {
+      document.getElementById("update_name"+id).style.borderColor = ""; 
+      }
+      var email =document.getElementById("email"+id).value;
+      if(email==""){
+      document.getElementById("email"+id).style.borderColor = "red"; exit;
+      } else {
+      document.getElementById("email"+id).style.borderColor = ""; 
+      }
+            let xhr = new XMLHttpRequest();
+            let url = "api/api.php";
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+              if (xhr.readyState === 4 && xhr.status === 200) {
+                  var responseJsonObj = JSON.parse(this.responseText);
+                   loaddata();
+                   if (responseJsonObj.statusapi=="success"){
+              document.getElementById("result").innerHTML= ("<span style='color:green;'>"+responseJsonObj.message+"</span>");
+                       } else {
+              document.getElementById("result").innerHTML= ("<span style='color:red;'>"+"Upload Failed..!!"+"</span>");
+                       }
+                 }
+            };
+            var jsonData = JSON.stringify({ "update_name": update_name, "email": email, "update_id": id, "method":"Update" });
+            xhr.send(jsonData);
+        }
+
+function Delete(vals){
+   var con=confirm("Are You Sure..? To Delete This Account !!");
+                if(con){
+     let xhr = new XMLHttpRequest();
+            let url = "api/api.php";
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+              if (xhr.readyState === 4 && xhr.status === 200) {
+                  var responseJsonObj = JSON.parse(this.responseText);
+                  loaddata();
+                  if (responseJsonObj.statusapi=="success"){
+              document.getElementById("result").innerHTML= ("<span style='color:green;'>"+responseJsonObj.message+"</span>");
+                       } else {
+              document.getElementById("result").innerHTML= ("<span style='color:red;'>"+"Delete Failed..!!"+"</span>");
+                       }
+                 }
+            };
+            var jsonData = JSON.stringify({ "delete_id": vals, "method":"Delete" });
+            xhr.send(jsonData);
+             }
+        }
+function updatephoto(id){
+      var File_edit =document.getElementById("File_edit"+id).value;
+      if(File_edit==""){
+      alert("Please Select A Passphoto"); exit;
+      } 
+      var photo_name =document.getElementById("imgupdate"+id).value;
+            let xhr = new XMLHttpRequest();
+            let url = "api/api.php";
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+              if (xhr.readyState === 4 && xhr.status === 200) {
+                  var responseJsonObj = JSON.parse(this.responseText);
+                  document.getElementById("data_form").reset();
+                  loaddata();
+                  if (responseJsonObj.statusapi=="success"){
+              document.getElementById("result").innerHTML= ("<span style='color:green;'>"+responseJsonObj.message+"</span>");
+                       } else {
+              document.getElementById("result").innerHTML= ("<span style='color:red;'>"+"Upload Failed..!!"+"</span>");
+                       }
+                 }
+            };
+            var jsonData = JSON.stringify({ "photo_name": photo_name, "photo_id": id,  "method":"updatephoto" });
+            xhr.send(jsonData);
+        }
+     $("body").on("change", "#fileUpload", function () {
+            var fileUpload = $("#fileUpload")[0];
+            var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.xls|.xlsx)$/;
+            if (regex.test(fileUpload.value.toLowerCase())) {
+                if (typeof (FileReader) != "undefined") {
+                    var reader = new FileReader();
+                    if (reader.readAsBinaryString) {
+                        reader.onload = function (e) {
+                            ProcessExcel(e.target.result);
+                        };
+                        reader.readAsBinaryString(fileUpload.files[0]);
+                    } else {
+                        reader.onload = function (e) {
+                            var data = "";
+                            var bytes = new Uint8Array(e.target.result);
+                            for (var i = 0; i < bytes.byteLength; i++) {
+                                data += String.fromCharCode(bytes[i]);
+                            }
+                            ProcessExcel(data);
+                        };
+                        reader.readAsArrayBuffer(fileUpload.files[0]);
+                    }
+                } else {
+                    alert("This browser does not support HTML5.");
+                }
+            } else {
+               $('#fileUpload').val('');
+                alert("Please upload a valid Excel file.");
+               }
+        });
+        function ProcessExcel(data) {
+            document.getElementById("xlsubmit").style.display="block";
+            var workbook = XLSX.read(data, {
+                type: 'binary'
+            });
+            var firstSheet = workbook.SheetNames[0];
+            var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
+            var table = $("<table />");
+            table[0].border = "1";
+            table[0].width = "100%";
+            table[0].align = "center";
+            var row = $(table[0].insertRow(-1));
+            var headerCell = $("<th />");
+            headerCell.html("Id");
+            row.append(headerCell);
+
+            var headerCell = $("<th />");
+            headerCell.html("Name");
+            row.append(headerCell);
+
+            var headerCell = $("<th />");
+            headerCell.html("Link");
+            row.append(headerCell);
+
+            var headerCell = $("<th />");
+            headerCell.html("Photo");
+            row.append(headerCell);
+          
+            for (var i = 0; i < excelRows.length; i++) {
+            var row = $(table[0].insertRow(-1));
+            var cell = $("<td />");
+            cell.html(excelRows[i].Id);
+             row.append(cell);
+
+            cell = $("<td />");
+            cell.html(excelRows[i].Name);
+             row.append(cell);
+
+            cell = $("<td />");
+            cell.html(excelRows[i].Link);
+            row.append(cell);
+
+            cell = $("<td />");
+            cell.html(excelRows[i].Photo);
+            row.append(cell);
+             }
+
+            var dvExcel = $("#dvExcel");
+            dvExcel.html("");
+            dvExcel.append(table);
+        };
+  $(document).ready(function (e) {
+  $("#xlsubmit").on('click',(function(e) {
+    var formData = document.querySelector('#xlform');
+    var Data = new FormData(formData);
+    e.preventDefault();
+    $.ajax({
+      url: "api/xl_upload.php",
+      type: "POST",
+      data:  Data,
+      contentType: false,
+      cache: false,
+      processData:false,
+      success: function(data)
+        {
+      $('#fileUpload').val('');
+      loaddata();
+      $("#xl").css("display", "none");
+      $("#xlsubmit").css("display", "none");
+      $("#dvExcel").html("");
+      $("#result").html(data);
+       },
+           
+     });
+  }));
+}); 
+
+</script>
+
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  
+    <title>
+      JavaScript | Sending JSON data to server.
+    </title>
+  </head>
+  
+  <body style="text-align:center;" id="body" onLoad="myFunction()">
+    <h1 style="color:green;">
+     Javascript Api
+    </h1>
+  
+
+        <!-- Making a text input -->
+        <form method="post" id="send_data" enctype="multipart/form-data" action="api/ck.php" name="">
+        <input type="hidden" id="method" value="insert" name="method" >
+        <input type="text" id="name" placeholder="Video Name" name="name" value="">
+        <input type="text" id="link1" placeholder="Link" name="link1" value="">
+     
+          
+        <!-- Button to send data -->
+        <input id="Sent" type="submit"  value="Submit">
+  
+      <!-- For printing result from server -->
+     
+ </form>
+
+  <!-- Include the JavaScript file -->
+  <div id="result1">
+  <table width="50%" border="1">
+  <tr>
+    <td width="50%">Video Name</td>
+    <td width="50%">Video</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
+  </div>
+  
+  </body>
+  <script type="text/javascript">
+    function myFunction() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+     document.getElementById("result1").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("POST", "api/view.php", true);
+  xhttp.send();
+}
+  </script>
+  
+</html>

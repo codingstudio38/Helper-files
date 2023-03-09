@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  
+    <title>
+      JavaScript | Sending JSON data to server.
+    </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  </head>
+  
+  <body style="text-align:center;" id="body" onLoad="myFunction()">
+    <h1 style="color:green;">
+     Javascript Api
+    </h1>
+  
+
+        <!-- Making a text input -->
+        <form method="post" id="send_data" enctype="multipart/form-data" action="" name="">
+        <input type="hidden" id="method" value="insert" value="">
+        <input type="text" id="name" placeholder="Video Name" value="">
+        <input type="text" id="link1" placeholder="Link" value="">
+     
+          
+        <!-- Button to send data -->
+        <input id="Sent" type="button"  value="Submit">
+  
+      <!-- For printing result from server -->
+     
+      <div id="result1" style="color:green"><div>
+ </form>
+
+  <!-- Include the JavaScript file -->
+  <div id="div-to-refresh">
+  </div>
+  
+  </body>
+  <script type="text/javascript">
+    function myFunction() {
+	var method=document.getElementById("method").value;
+	var name=document.getElementById("name").value;
+	var link1=document.getElementById("link1").value;
+	//alert(link1);
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+	document.getElementById("send_data").reset();
+     document.getElementById("result1").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("POST", "api/ck.php?method="+method+"&name="+name+"&link1="+link1, true);
+  xhttp.send();
+}
+  </script>
+  
+</html>

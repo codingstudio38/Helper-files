@@ -3,7 +3,7 @@ if (isset($_COOKIE['products'])) {
   $products = json_decode($_COOKIE['products']);
 } else {
   $products = array();
-}
+} 
 echo "-----------All products----------"."<br>";
 foreach ($products as $key => $value) {
   echo $value."<br>";

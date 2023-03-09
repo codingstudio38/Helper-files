@@ -1,0 +1,270 @@
+<!DOCTYPE html>  
+<html>
+  <head>
+    <title>
+      Ajax | Sending JSON data to server.
+    </title>
+    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/w3.css">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  
+  <body style="text-align:center;" id="body">
+    <h1 style="color:green;">
+     Ajax Api
+    </h1> 
+ 
+        <p id="result"></p>
+        <form method="post" enctype="multipart/form-data" action="">
+          <table width="50%" border="0" align="center">
+         <tr>
+         <td width="34%">Passphoto-></td>
+           <td width="30%">
+    <input type="file" name="inputFile" id="inputFile" class="inputFile" accept="image/jpeg, image/jpg, image/png">
+    
+    <input type="button" id="uploadBtn"  value="UPLOAD" class="btnSubmit" />
+           </td>
+           <td width="36%"><div id="targetLayer" >No Image</div></td>
+         </tr>
+        </table>
+      </form>
+      <form method="post" enctype="multipart/form-data" action="" id="data_form" >
+          <table width="50%" border="0" align="center">
+        <tr>
+         <td width="34%">Name</td>
+          <td width="34%"><input type="text" id="name1" placeholder="Video Name"></td>
+           <td width="34%"></td>
+         </tr>
+        <tr>
+         <td width="34%">Link</td>
+          <td width="34%"><input type="text" id="link" placeholder="Put iframe Link" ></td>
+           <td width="34%"></td>
+         </tr>
+         <tr>
+         <td width="34%" colspan="3"><input type="button" id="Sent" value="Send JSON" ></td>
+         </tr>
+        </table>
+        </form>
+ <div id="uploaddata"> </div>
+  </body>
+  <script type="text/javascript">
+ $(document).ready(function() {
+  $.ajax({
+    type: "POST",
+    url: "api/data_view.php",
+    success: function(data){
+    $("#uploaddata").html(data);     
+    }
+  });
+});
+function loaddata() {
+    $.ajax({
+    type: "POST",
+    url: "api/data_view.php",
+    success: function(data){
+    $("#uploaddata").html(data);     
+    }
+  });
+}
+$(document).ready(function(){
+    $("#uploadBtn").click(function(){
+       var formData = new FormData(this.form);
+       var inputFile=$("#inputFile").val();
+       if(inputFile == ""){
+       alert("Please Select A Passphoto"); exit;
+       }
+        $.ajax({
+            url: 'api/img_api.php',
+            type: 'POST',
+            data: formData,
+            contentType: false,       
+            cache: false,             
+            processData:false, 
+            success:function(response) {
+            $("#targetLayer").html(response);                    
+            }
+        });      
+    });
+});
+document.getElementById("inputFile").onchange = function(){
+     var image =document.getElementById("inputFile").value;
+     if(image!='')
+     {
+           var checkimg = image.toLowerCase();
+          if (!checkimg.match(/(\.jpg|\.png|\.JPG|\.PNG|\.jpeg|\.JPEG|\.pdf|\.doc|\.docx|\.txt|\.xlsx)$/)){ 
+              document.getElementById("inputFile").focus();
+              alert("Please Select jpg,png,pdf,xl,.doc");
+              document.getElementById("inputFile").value=""; exit;
+           }
+            var image = document.getElementById("inputFile"); 
+            var size = parseFloat(image.files[0].size / (1024 * 1024)).toFixed(2); 
+           if(size >  2)  
+            {
+            alert("Please select image size less than 2 MB");
+            document.getElementById("inputFile").value=""; exit;
+            }
+             return true;
+      }
+}
+document.getElementById('Sent').onclick = function(){
+      var inputFile = document.getElementById("inputFile").value;
+      if(inputFile==""){
+      alert("Please Select A Passphoto");exit;
+      }
+      var photo =document.getElementById("photo").value;
+      var name1 =document.getElementById("name1").value;
+      if(name1==""){
+      document.getElementById("name1").style.borderColor = "red"; exit;
+      } else {
+      document.getElementById("name1").style.borderColor = ""; 
+      }
+      var link =document.getElementById("link").value;
+      if(link==""){
+      document.getElementById("link").style.borderColor = "red"; exit;
+      } else {
+      document.getElementById("link").style.borderColor = ""; 
+      }
+            let xhr = new XMLHttpRequest();
+            let url = "api/api.php";
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+              if (xhr.readyState === 4 && xhr.status === 200) {
+                  var responseJsonObj = JSON.parse(this.responseText);
+                  document.getElementById("data_form").reset();
+                  document.getElementById("inputFile").value="";
+                  document.getElementById("targetLayer").innerHTML="";
+                  loaddata();
+                  if (responseJsonObj.statusapi=="success"){
+              document.getElementById("result").innerHTML= ("<span style='color:green;'>"+responseJsonObj.message+"</span>");
+                       } else {
+              document.getElementById("result").innerHTML= ("<span style='color:red;'>"+"Upload Failed..!!"+"</span>");
+                       }
+                 }
+            };
+            var jsonData = JSON.stringify({ "photo": photo, "name": name1, "link": link, "method":"insert" });
+            xhr.send(jsonData);
+        }
+
+function updatedata(id){
+      var update_name =document.getElementById("update_name"+id).value;
+      if(update_name==""){
+      document.getElementById("update_name"+id).style.borderColor = "red"; exit;
+      } else {
+      document.getElementById("update_name"+id).style.borderColor = ""; 
+      }
+      var update_link =document.getElementById("update_link"+id).value;
+      if(update_link==""){
+      document.getElementById("update_link"+id).style.borderColor = "red"; exit;
+      } else {
+      document.getElementById("update_link"+id).style.borderColor = ""; 
+      }
+            let xhr = new XMLHttpRequest();
+            let url = "api/api.php";
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+              if (xhr.readyState === 4 && xhr.status === 200) {
+                  var responseJsonObj = JSON.parse(this.responseText);
+                  document.getElementById("data_form").reset();
+                  loaddata();
+                  if (responseJsonObj.statusapi=="success"){
+              document.getElementById("result").innerHTML= ("<span style='color:green;'>"+responseJsonObj.message+"</span>");
+                       } else {
+              document.getElementById("result").innerHTML= ("<span style='color:red;'>"+"Upload Failed..!!"+"</span>");
+                       }
+                 }
+            };
+            var jsonData = JSON.stringify({ "update_name": update_name, "update_link": update_link, "update_id": id, "method":"Update" });
+            xhr.send(jsonData);
+        }
+function Delete(vals){
+   var con=confirm("Are You Sure..? To Delete This Account !!");
+                if(con){
+     let xhr = new XMLHttpRequest();
+            let url = "api/api.php";
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+              if (xhr.readyState === 4 && xhr.status === 200) {
+                  var responseJsonObj = JSON.parse(this.responseText);
+                  loaddata();
+                  if (responseJsonObj.statusapi=="success"){
+              document.getElementById("result").innerHTML= ("<span style='color:green;'>"+responseJsonObj.message+"</span>");
+                       } else {
+              document.getElementById("result").innerHTML= ("<span style='color:red;'>"+"Delete Failed..!!"+"</span>");
+                       }
+                 }
+            };
+            var jsonData = JSON.stringify({ "delete_id": vals, "method":"Delete" });
+            xhr.send(jsonData);
+             }
+        }
+function updateimg(id){
+     var image =document.getElementById("File_edit"+id).value;
+     if(image!='')
+     {
+           var checkimg = image.toLowerCase();
+          if (!checkimg.match(/(\.jpg|\.png|\.JPG|\.PNG|\.jpeg|\.JPEG|\.pdf|\.doc|\.docx|\.txt|\.xlsx)$/)){ 
+              document.getElementById("File_edit"+id).focus();
+              alert("Please Select jpg,png,pdf,xl,.doc");
+              document.getElementById("File_edit"+id).value=""; exit;
+           }
+            var image = document.getElementById("File_edit"+id); 
+            var size = parseFloat(image.files[0].size / (1024 * 1024)).toFixed(2); 
+           if(size >  2)  
+            {
+            alert("Please select image size less than 2 MB");
+            document.getElementById("File_edit"+id).value=""; exit;
+            } else {
+			upload(id);
+			}
+             return true;
+      }
+}
+function upload(id){
+	   var formData = document.querySelector('#myFormId'+id);
+	   var formData = new FormData(formData);
+	   var inputFile=$("#File_edit"+id).val();
+	   if(inputFile == ""){
+       alert("Please Select A Passphoto"); exit;
+       }
+        $.ajax({
+            url: 'api/img_update.php',
+            type: 'POST',
+            data: formData,
+            contentType: false,       
+            cache: false,             
+            processData:false, 
+            success:function(response) {
+            $("#update_sms"+id).html(response);                    
+            }
+        });      
+    };
+function updatephoto(id){
+      var File_edit =document.getElementById("File_edit"+id).value;
+      if(File_edit==""){
+      alert("Please Select A Passphoto"); exit;
+      } 
+      var photo_name =document.getElementById("imgupdate"+id).value;
+            let xhr = new XMLHttpRequest();
+            let url = "api/api.php";
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+              if (xhr.readyState === 4 && xhr.status === 200) {
+                  var responseJsonObj = JSON.parse(this.responseText);
+                  document.getElementById("data_form").reset();
+                  loaddata();
+                  if (responseJsonObj.statusapi=="success"){
+              document.getElementById("result").innerHTML= ("<span style='color:green;'>"+responseJsonObj.message+"</span>");
+                       } else {
+              document.getElementById("result").innerHTML= ("<span style='color:red;'>"+"Upload Failed..!!"+"</span>");
+                       }
+                 }
+            };
+            var jsonData = JSON.stringify({ "photo_name": photo_name, "photo_id": id,  "method":"updatephoto" });
+            xhr.send(jsonData);
+        }
+  </script>
+</html>

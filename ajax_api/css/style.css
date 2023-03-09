@@ -1,0 +1,48 @@
+@charset "utf-8";
+/* CSS Document */
+.btnSubmit {
+  padding: 11px 51px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  font-size: larger;
+  font-weight: 700;
+  box-shadow: 0 3px 5px rgb(0 0 0 / 30%);}
+
+.btnSubmit {
+  background: linear-gradient(327deg,#ff6ec4,#7873f5);
+  color: black; 
+  border: none;
+}
+
+.btnSubmit:hover {
+ background: linear-gradient( 40deg ,#ff089a,#0800d3);
+  color: white;
+} 
+.inputFile{position: relative;
+    width: 185px;
+    height: 48px;
+    background: linear-gradient(40deg,#ff6ec4,#7873f5);
+    box-shadow: 0 3px 5px rgb(0 0 0 / 30%);
+    color: #fff;
+    font-weight: bold;
+    line-height: 3;}
+    #targetLayer,.targetLayer1{
+    width: 150px;
+    height: 150px; 
+    background-color: antiquewhite;
+    text-align: center;
+    line-height: 8.5;
+    color: #8c9191;
+    border-style: dashed;
+    border-color: black;}
+
+
+     
+   
+    
+
+
