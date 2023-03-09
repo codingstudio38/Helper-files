@@ -27,6 +27,14 @@ if($method=='MailValid')
 }
 if($method=='insert')
 {
+// $sql="INSERT INTO tblusers(FirstName,LastName,EmailId,ContactNumber,Address) VALUES(:fn,:ln,:eml,:cno,:adrss)";
+// $query = $dbh->prepare($sql);
+// $query->bindParam(':fn',$fname,PDO::PARAM_STR);
+// $query->bindParam(':ln',$lname,PDO::PARAM_STR);
+// $query->bindParam(':eml',$emailid,PDO::PARAM_STR);
+// $query->bindParam(':cno',$contactno,PDO::PARAM_STR);
+// $query->bindParam(':adrss',$address,PDO::PARAM_STR);
+// $query->execute();
 	$xlid=rand(0,1000);
 	$name=$data['name'];
 	$email=$data['email'];
