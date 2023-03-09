@@ -57,6 +57,15 @@ if($method=='insert')
 }
 if($method=='Update')
 {
+// $sql="update tblusers set FirstName=:fn,LastName=:ln,EmailId=:eml,ContactNumber=:cno,Address=:adrss where id=:uid";
+// $query = $dbh->prepare($sql);
+// $query->bindParam(':fn',$fname,PDO::PARAM_STR);
+// $query->bindParam(':ln',$lname,PDO::PARAM_STR);
+// $query->bindParam(':eml',$emailid,PDO::PARAM_STR);
+// $query->bindParam(':cno',$contactno,PDO::PARAM_STR);
+// $query->bindParam(':adrss',$address,PDO::PARAM_STR);
+// $query->bindParam(':uid',$userid,PDO::PARAM_STR);
+// $query->execute();
 	$update_id=$data['update_id'];
 	$update_name=$data['update_name'];
 	$email=$data['email'];
@@ -117,6 +126,11 @@ if($method=='Delete')
 }
 if($method=='viewall') 
 {
+// $userid=intval($_GET['id']);
+// $sql = "SELECT FirstName,LastName,EmailId,ContactNumber,Address,PostingDate,id from tblusers where id=:uid";
+// $query = $dbh->prepare($sql);
+// $query->bindParam(':uid',$userid,PDO::PARAM_STR);
+// $query->execute();	
 $query = "SELECT * FROM ajax_api ORDER BY id";
 foreach($dbConnection->query($query, PDO::FETCH_ASSOC) as $row){
     $dataapi[] = array("id" => $row['id'],
